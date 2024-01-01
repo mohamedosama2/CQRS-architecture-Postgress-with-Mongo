@@ -2,10 +2,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { InMemoryAlarmPersistenceModule } from 'src/alarms/infrastructure/persistence/in-momory/in-memory-persistence.module';
 import { OrmAlarmPersistenceModule } from 'src/alarms/infrastructure/persistence/orm/orm-persistence.module';
-import { MongoAlarmPersistenceModule } from 'src/alarms/infrastructure/persistence/MONGO/mongo-persistence.module';
 
 export interface ApplicationBootstrapOptions {
-  driver: 'orm' | 'in-memory' | 'mongo';
+  driver: 'orm' | 'in-memory';
 }
 
 export const bootstrapConnections = {
@@ -19,16 +18,14 @@ export const bootstrapConnections = {
       autoLoadEntities: true,
       synchronize: true,
     }),
-  ],
-  mongo: [
     MongooseModule.forRoot(
       'mongodb+srv://mo:18sHaAoRuTOiIAG0@cluster0.mkzmq.mongodb.net/advanced-arch',
     ),
   ],
+
   'in-memory': [],
 };
 export const persistenceModule = {
   orm: OrmAlarmPersistenceModule,
-  mongo: MongoAlarmPersistenceModule,
   'in-memory': InMemoryAlarmPersistenceModule,
 };

@@ -1,20 +1,18 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Alarm } from '../../domain/alarm';
 import { GetAlarmsQuery } from './get-alarms.query';
-import { AlarmRepository } from '../ports/alarm.repository';
 import { Logger } from '@nestjs/common';
+import { FindAlarmsRepository } from '../ports/find-alarms.repository';
+import { AlarmReadModel } from 'src/alarms/domain/read-models/alarm.read-model';
 
 @QueryHandler(GetAlarmsQuery)
 export class GetAlarmsQueryHandler
-  implements IQueryHandler<GetAlarmsQuery, Alarm[]>
+  implements IQueryHandler<GetAlarmsQuery, AlarmReadModel[]>
 {
-  constructor(private readonly alarmRepository: AlarmRepository) {}
-  private readonly logger = new Logger(GetAlarmsQuery.name);
+  constructor(private readonly alarmRepository: FindAlarmsRepository) {}
 
-  async execute(query: GetAlarmsQuery): Promise<Alarm[]> {
-    this.logger.debug(
-        `Processing "GetAlarmsQuery": ${JSON.stringify(query)}`,
-      );
+  async execute(query: GetAlarmsQuery): Promise<AlarmReadModel[]> {
     return this.alarmRepository.findAll();
   }
+
 }
